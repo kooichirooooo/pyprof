@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  app:
+    container_name: pyprof-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: devcontainer.env
+    command: sleep infinity
+    network_mode: service:db
+    volumes:
+      - ..:/workspace:cached
+  db:
+    container_name: pyprof-db
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: pyprof
+    ports:
+      - 5432:5432

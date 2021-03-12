@@ -8,7 +8,7 @@ ARG USER_GID=$USER_UID
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update \
-    && apt-get install -y curl wget unzip zsh software-properties-common gnupg2 build-essential \
+    && apt-get install -y curl wget unzip zsh software-properties-common gnupg2 build-essential libpq-dev vim \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
@@ -52,5 +52,7 @@ RUN echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> $HOME/.zshrc
 
 COPY gitconfig /home/vscode/.gitconfig
 COPY git.sh /home/vscode/
+
+WORKDIR /workspace
 
 CMD ["/bin/zsh"]

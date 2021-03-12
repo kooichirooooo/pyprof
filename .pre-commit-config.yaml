@@ -23,10 +23,6 @@ repos:
     rev: 3.8.4
     hooks:
       - id: flake8
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.812
-    hooks:
-      - id: mypy
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.2.1
     hooks:
@@ -39,6 +35,14 @@ repos:
       - id: prettier
         args: [--parser, json]
         types: [json]
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: poetry run mypy
+        exclude: "pyprof/alembic"
+        language: python
+        files: '\.py$'
 
 default_language_version:
   python: python3.9
