@@ -9,7 +9,7 @@ DB_URL = "postgres+psycopg2://postgres:postgres@localhost/pyprof"
 
 Base = declarative_base()
 
-engine = create_engine(DB_URL, echo=True)
+engine = create_engine(DB_URL, echo=False)
 Session = sessionmaker(bind=engine)
 
 
@@ -18,7 +18,10 @@ class Frame(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(32))
-    blocks = relationship("Block", back_populates="frames")
+    blocks = relationship("Block", cascade="all, delete, delete-orphan")
+
+    def __init__(self, name: str) -> None:
+        self.name = name
 
     def __repr__(self) -> str:
         return f"<Frame(name={self.name})>"
@@ -30,6 +33,9 @@ class Block(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     frame_id = Column(Integer, ForeignKey("frames.id"))
     name = Column(String(32))
+
+    def __init__(self, name: str) -> None:
+        self.name = name
 
     def __repr__(self) -> str:
         return f"<Block(name={self.name})>"
